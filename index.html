@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio – BUT GEII</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-logo">GEII · Portfolio</div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Présentation</a></li>
+      <li><a href="interets.html">Centres d'intérêts</a></li>
+      <li><a href="competences.html">Compétences</a></li>
+      <li><a href="projets.html">Projets</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Ouvrir le menu">&#9776;</button>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <main>
+    <section class="hero">
+
+      <!-- LEFT : text -->
+      <div class="hero-left">
+        <div class="hero-eyebrow anim-1"><span class="live-dot"></span> BUT GEII · IUT de Bordeaux · 2025–2028</div>
+
+        <h1 class="hero-name anim-2">
+          <em>Alban</em><br>
+          Puyou
+        </h1>
+
+        <p class="hero-role anim-3">Génie Électrique &amp; Informatique Industrielle</p>
+
+        <p class="hero-bio anim-4">
+          Actuellement en première année de <strong>BUT GEII</strong> à l'IUT de Bordeaux, 
+          je suis passionné par  <strong>l'électronique</strong> et les manipulations diverses
+          dans ce domaine.
+          <br>
+          <br>Je suis particulièrement intéressé par la <strong>conception de circuits, 
+          l'analyse et l'exploitation de signaux</strong> dans leur adaptation à des systèmes.
+          Mon objectif est de comprendre et maîtriser les évolutions ainsi que 
+          la dimension technique dans l'électronique embarqué.
+          <br>
+          <br>Mon projet est d'intégrer le <strong>parcours ESE</strong> en deuxième année, d'effectuer 
+          un  <strong>stage à l'étranger</strong> ainsi qu'un contrat en <strong>alternance en 3e année.</strong>
+          En quête de défis et de responsabilités, je suis impatient de rentrer 
+          dans le monde du travail pour apporter ma pierre à l'édifice.
+
+
+        </p>
+
+        <div class="hero-cta anim-5">
+          <a href="projets.html" class="btn btn-copper">Voir mes projets</a>
+          <a href="contact.html" class="btn btn-ghost">Me contacter</a>
+        </div>
+      </div>
+
+      <!-- RIGHT : photo -->
+      <div class="hero-photo-col anim-3">
+        <div class="photo-wrap">
+          <div class="photo-frame">
+            <!--
+              Pour ajouter votre photo :
+              1. Placez votre fichier image dans le même dossier que index.html
+              2. Remplacez "photo.jpg" par le nom de votre fichier
+            -->
+            <img
+              src="photo.jpg"
+              alt="Photo de profil"
+              onerror="this.style.display='none'"
+            >
+            <div class="photo-placeholder">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="22" r="12" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8 56c0-13.255 10.745-24 24-24s24 10.745 24 24" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <span>Votre photo ici</span>
+            </div>
+          </div>
+          <div class="photo-corner tl"></div>
+          <div class="photo-corner tr"></div>
+          <div class="photo-corner bl"></div>
+          <div class="photo-corner br"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===== INFO STRIP ===== -->
+    <div class="info-strip anim-5">
+
+      <div class="info-cell">
+        <div class="info-label">Formation</div>
+        <div class="info-value">1ère année de BUT GEII</div>
+        <div class="info-sub">Génie Électrique &amp; Informatique Industrielle · IUT de Bordeaux</div>
+      </div>
+
+      <div class="info-cell">
+        <div class="info-label">Baccalauréat</div>
+        <div class="info-value">Mathématiques · Physique-Chimie</div>
+        <div class="info-sub">Mention Assez Bien · Lycée des Graves, Gradignan</div>
+      </div>
+
+      <div class="info-cell">
+        <div class="info-label">Âge &amp; Localisation</div>
+        <div class="info-value">19 ans · Gradignan</div>
+        <div class="info-sub">Nouvelle-Aquitaine, France</div>
+      </div>
+
+      <div class="info-cell">
+        <div class="info-label">Projet professionnel</div>
+        <div class="info-value">Systèmes embarqués</div>
+        <div class="info-sub">Electronique embarquée · Traitement du signal</div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <span>BUT GEII · Université de Bordeaux</span>
+    <span>2025 – 2028</span>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>
