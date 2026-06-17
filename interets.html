@@ -184,10 +184,20 @@
       background: var(--ink-4);
     }
 
+    /* Grille : 4 colonnes sur desktop, responsive */
     .photo-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: .8rem;
+      gap: 1rem;
+      margin-bottom: .5rem;
+    }
+    @media (max-width: 900px) { .photo-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .photo-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* Enveloppe figure (photo + légende sous) */
+    .photo-figure {
+      display: flex;
+      flex-direction: column;
     }
 
     .photo-slot {
@@ -199,17 +209,46 @@
       box-shadow: var(--shadow);
       position: relative;
       transition: transform .25s, box-shadow .25s;
-      cursor: pointer;
+      cursor: zoom-in;
     }
     .photo-slot:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
     }
     .photo-slot img {
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform .35s ease;
     }
+    .photo-slot:hover img { transform: scale(1.04); }
+
+    /* Indicateur loupe */
+    .photo-slot::after {
+      content: '⤢';
+      position: absolute;
+      top: .5rem; right: .6rem;
+      width: 26px; height: 26px;
+      background: rgba(15,13,10,.52);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .72rem; color: rgba(255,255,255,.85);
+      opacity: 0; transition: opacity .2s;
+      pointer-events: none;
+    }
+    .photo-slot:hover::after { opacity: 1; }
+
+    /* Légende sous chaque photo */
+    .photo-caption {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .07em;
+      color: var(--ink-3);
+      text-align: center;
+      padding: .42rem .3rem .05rem;
+      line-height: 1.45;
+    }
+
     /* Placeholder quand pas de photo */
     .photo-slot-empty {
       width: 100%; height: 100%;
@@ -236,6 +275,11 @@
     .photo-slot-empty svg {
       width: 28px; opacity: .4;
     }
+
+    /* Couleurs des <strong> selon la section */
+    #guitare .is-body strong      { color: #c07b3a; }
+    #rugby .is-body strong        { color: #4a8c3f; }
+    #electronique .is-body strong { color: #6a7fc1; }
 
     /* Scroll progress indicator */
     .scroll-progress {
@@ -347,46 +391,32 @@
         <div class="photo-section-title">Photos</div>
         <div class="photo-grid">
 
-          <!-- Remplacez src="..." par le chemin de votre photo -->
-          <div class="photo-slot">
-            <img src="guitare.jpg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>Votre guitare</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="guitare.jpg" data-caption="Guitare — instrument principal">
+              <img src="guitare.jpg" alt="Guitare">
             </div>
+            <p class="photo-caption">Fender Stratocaster American Pro 2 70th anniversary</p>
           </div>
 
-          <div class="photo-slot">
-            <img src="ampli.jpg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>Ampli / pédales</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="ampli.jpg" data-caption="Ampli à lampes &amp; pédales d'effets">
+              <img src="ampli.jpg" alt="Ampli / pédales">
             </div>
+            <p class="photo-caption">Ampli à lampe Fender Bassman 1963</p>
           </div>
 
-          <div class="photo-slot">
-            <img src="pedale.jpg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>Setup MAO</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="pedale.jpg" data-caption="Pédale d'effets — hardware analogique">
+              <img src="pedale.jpg" alt="Pédale d'effets">
             </div>
+            <p class="photo-caption">Pédale d'effets</p>
           </div>
 
-          <div class="photo-slot">
-            <<img src="setup.jpg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>Circuit / montage</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="setup.jpg" data-caption="Setup MAO — Ableton Live &amp; plugins">
+              <img src="setup.jpg" alt="Setup MAO">
             </div>
+            <p class="photo-caption">Setup MAO</p>
           </div>
 
         </div>
@@ -434,36 +464,26 @@
         <div class="photo-section-title">Photos</div>
         <div class="photo-grid">
 
-          <div class="photo-slot">
-            <img src="moi.jpeg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>Match / action</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="moi.jpeg" data-caption="Match / action — Léognan Rugby">
+              <img src="moi.jpeg" alt="Match / action">
             </div>
+            <p class="photo-caption">Match/action</p>
           </div>
 
-          <div class="photo-slot">
-            <img src="ekip.jpg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>Équipe</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="ekip.jpg" data-caption="Photo d'équipe — Léognan Rugby">
+              <img src="ekip.jpg" alt="Équipe 2024/2025">
             </div>
+            <p class="photo-caption">Équipe 2024/2025</p>
           </div>
 
-          <div class="photo-slot">
-            <img src="jump.jpg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>1/8 finale</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="jump.jpg" data-caption="1/8 de finale du championnat de France U18">
+              <img src="jump.jpg" alt="1/8 finale">
             </div>
-          
-
+            <p class="photo-caption">1/8 VS Massy/Anthony</p>
+          </div>
 
         </div>
       </section>
@@ -503,26 +523,19 @@
         <div class="photo-section-title">Photos</div>
         <div class="photo-grid">
 
-          <div class="photo-slot">
-            <img src="schemapedale.jpg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>Circuit / PCB</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="schemapedale.jpg" data-caption="Schéma de pédale d'effets — Circuit PCB">
+              <img src="schemapedale.jpg" alt="Circuit / PCB">
             </div>
+            <p class="photo-caption">Circuit d'une pédale d'effet de "Phaser"</p>
           </div>
 
-          <div class="photo-slot">
-            <img src="arduino.jpg" alt="description">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-              </svg>
-              <span>Arduino / µC</span>
+          <div class="photo-figure">
+            <div class="photo-slot" data-src="arduino.jpg" data-caption="Microcontrôleur Arduino — programmation embarquée">
+              <img src="arduino.jpg" alt="Arduino">
             </div>
+            <p class="photo-caption">Arduino</p>
           </div>
-
 
         </div>
       </section>
@@ -534,6 +547,15 @@
     <span>BUT GEII · IUT de Bordeaux</span>
     <span>2025 – 2028</span>
   </footer>
+
+  <!-- ===== LIGHTBOX ===== -->
+  <div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true">
+    <div class="lightbox-inner" id="lightbox-inner">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Fermer">✕</button>
+      <img src="" alt="" id="lightbox-img">
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+  </div>
 
   <script src="nav.js"></script>
   <script>
@@ -565,6 +587,34 @@
     }
     window.addEventListener('scroll', updateActiveLink, { passive: true });
     updateActiveLink();
+
+    // ── Lightbox ──
+    const overlay   = document.getElementById('lightbox');
+    const lbImg     = document.getElementById('lightbox-img');
+    const lbCaption = document.getElementById('lightbox-caption');
+    const lbClose   = document.getElementById('lightbox-close');
+    const lbInner   = document.getElementById('lightbox-inner');
+
+    document.querySelectorAll('.photo-slot[data-src]').forEach(slot => {
+      slot.addEventListener('click', () => {
+        lbImg.src       = slot.dataset.src;
+        lbImg.alt       = slot.dataset.caption || '';
+        lbCaption.textContent = slot.dataset.caption || '';
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    lbClose.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    lbInner.addEventListener('click', e => e.stopPropagation());
   </script>
 </body>
 </html>
