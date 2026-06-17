@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact – Portfolio BUT GEII</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-logo">GEII · Portfolio</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Présentation</a></li>
+      <li><a href="interets.html">Centres d'intérêts</a></li>
+      <li><a href="competences.html">Compétences</a></li>
+      <li><a href="projets.html">Projets</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Ouvrir le menu">&#9776;</button>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <p class="page-eyebrow">Contact</p>
+      <h1 class="page-title">Prenons <em>contact</em></h1>
+    </div>
+
+    <div class="contact-layout">
+
+      <!-- INFO -->
+      <div>
+        <p class="contact-lede">
+          Une question, une opportunité de stage, d'alternance <br>
+          ou juste un <em>bon sujet</em> à partager ?
+        </p>
+        <p class="contact-blurb">
+          Je suis toujours heureux d'échanger autour de l'électronique,
+          du traitement audio, de musique ou encore même du rugby. N'hésitez pas à me joindre par
+          l'un des canaux ci-dessous ou via le formulaire.
+        </p>
+
+        <!-- Remplacez chaque valeur par vos vraies coordonnées -->
+        <a href="mailto:votre.email@exemple.com" class="contact-row">
+          <span class="contact-row-icon">✉</span>
+          puyoualban@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/alban-puyou-/" target="_blank" class="contact-row">
+          <span class="contact-row-icon">🔗</span>
+          www.linkedin.com/in/alban-puyou-
+        </a>
+        
+        </a>
+        <div class="contact-row" style="cursor:default;">
+          <span class="contact-row-icon">📍</span>
+          Gradignan, Nouvelle-Aquitaine
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="field">
+            <label for="fname">Prénom</label>
+            <input type="text" id="fname" name="fname" placeholder="Jean" required>
+          </div>
+          <div class="field">
+            <label for="lname">Nom</label>
+            <input type="text" id="lname" name="lname" placeholder="Dupont" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="email">Adresse e-mail</label>
+          <input type="email" id="email" name="email" placeholder="jean.dupont@exemple.com" required>
+        </div>
+        <div class="field">
+          <label for="subject">Sujet</label>
+          <input type="text" id="subject" name="subject" placeholder="Stage, question technique…">
+        </div>
+        <div class="field">
+          <label for="msg">Message</label>
+          <textarea id="msg" name="msg" placeholder="Votre message…" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-copper" style="align-self:flex-start;">
+          Envoyer →
+        </button>
+        <p id="form-ok">✓ Message envoyé ! (Pensez à connecter ce formulaire à un service d'e-mail.)</p>
+      </form>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>BUT GEII · IUT de Bordeaux</span>
+    <span>2025 – 2028</span>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('form-ok').style.display = 'block';
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>

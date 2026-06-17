@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compétences – Portfolio BUT GEII</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+
+    /* ══════════════════════════════
+       SIDEBAR FIXE DROITE
+       ══════════════════════════════ */
+    .comp-sidenav {
+      position: fixed; right: 2rem; top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: .6rem;
+      z-index: 150;
+    }
+    .comp-sidenav a {
+      display: flex; align-items: center; gap: .7rem;
+      padding: .5rem 1rem .5rem .8rem;
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 30px; font-family: var(--font-mono);
+      font-size: .67rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--ink-3); box-shadow: var(--shadow); white-space: nowrap;
+      max-width: 2.4rem; overflow: hidden;
+      transition: max-width .35s ease, border-color .2s, color .2s, background .2s, box-shadow .2s;
+    }
+    .comp-sidenav a:hover {
+      max-width: 220px; border-color: var(--copper);
+      color: var(--copper); box-shadow: 0 4px 16px rgba(181,101,42,.16);
+    }
+    .comp-sidenav a.active-section {
+      max-width: 220px; background: var(--copper);
+      border-color: var(--copper); color: #fff;
+      box-shadow: 0 4px 16px rgba(181,101,42,.28);
+    }
+    .csnav-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; opacity: .85; }
+    .csnav-label { flex-shrink: 0; }
+    @media (max-width: 960px) { .comp-sidenav { display: none; } }
+
+    /* ══════════════════════════════
+       STRUCTURE GLOBALE
+       ══════════════════════════════ */
+    .comp-sections { display: flex; flex-direction: column; }
+
+    .comp-section {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+    }
+    .comp-section:last-child { border-bottom: none; }
+    .comp-section::before {
+      content: ''; display: block;
+      width: 40px; height: 3px; border-radius: 2px;
+      background: var(--sec-color, var(--copper)); margin-bottom: 2rem;
+    }
+
+    /* En-tête de section */
+    .cs-header { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 1.8rem; }
+    .cs-icon-wrap {
+      width: 54px; height: 54px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+      border: 1.5px solid var(--border); background: #fff; box-shadow: var(--shadow);
+    }
+    .cs-title {
+      font-family: var(--font-display); font-size: 1.9rem; font-weight: 900;
+      color: var(--ink); line-height: 1.05; margin-bottom: .3rem;
+    }
+    .cs-title em { font-style: italic; color: var(--sec-color, var(--copper)); }
+    .cs-subtitle { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-3); }
+
+    /* ══════════════════════════════
+       SAVOIR-ÊTRE
+       ══════════════════════════════ */
+    .se-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .se-card {
+      background: #fff; border: 1px solid var(--border); border-radius: var(--r);
+      padding: 1.5rem; display: flex; gap: 1rem;
+      box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s;
+    }
+    .se-card:hover { transform: translateX(4px); box-shadow: var(--shadow-lg); }
+    .se-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: .1rem; }
+    .se-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: .3rem; }
+    .se-desc { font-size: .83rem; color: var(--ink-2); line-height: 1.8; }
+    .se-origin { font-family: var(--font-mono); font-size: .61rem; letter-spacing: .1em; text-transform: uppercase; color: var(--copper); margin-top: .5rem; }
+
+    /* ══════════════════════════════
+       BADGE ANNÉE
+       ══════════════════════════════ */
+    .year-badge {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: var(--green-pale); border: 1px solid #b6d9b3;
+      color: var(--green); border-radius: 20px; padding: .3rem .9rem;
+      font-family: var(--font-mono); font-size: .66rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase; margin-bottom: 2.5rem;
+    }
+    .year-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: block; }
+
+    /* ══════════════════════════════
+       EN-TÊTE DE NIVEAU
+       ══════════════════════════════ */
+    .niveau-header {
+      display: flex; align-items: center; gap: .9rem;
+      margin-bottom: 1.8rem; padding-bottom: .9rem;
+      border-bottom: 2px solid var(--sec-color, var(--copper-dim));
+    }
+    .niveau-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: .28rem 1rem; border-radius: 20px;
+      font-family: var(--font-mono); font-size: .63rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: #fff; background: var(--sec-color, var(--copper)); flex-shrink: 0;
+    }
+    .niveau-title {
+      font-family: var(--font-display); font-size: 1.05rem; font-weight: 700;
+      color: var(--ink); line-height: 1.3;
+    }
+
+    /* ══════════════════════════════
+       CARTE APPRENTISSAGE
+       Texte à gauche · Photo à droite
+       ══════════════════════════════ */
+    .ac-list { display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 2.5rem; }
+
+    .ac-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      transition: box-shadow .25s, transform .25s;
+    }
+    .ac-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+    .ac-body {
+      padding: 1.4rem 1.6rem;
+      display: flex; flex-direction: column; justify-content: center; gap: .55rem;
+      border-right: 1px solid var(--border);
+    }
+    .ac-num {
+      font-family: var(--font-mono); font-size: .6rem;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--sec-color, var(--copper)); opacity: .7;
+    }
+    .ac-title {
+      font-family: var(--font-display); font-size: .98rem; font-weight: 700;
+      color: var(--ink); line-height: 1.35;
+    }
+    .ac-desc { font-size: .81rem; color: var(--ink-3); line-height: 1.75; }
+
+    /* Zone photo */
+    .ac-photo {
+      position: relative;
+      background: var(--bg-2);
+      overflow: hidden;
+      min-height: 170px;
+    }
+    .ac-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform .4s ease;
+    }
+    .ac-card:hover .ac-photo img { transform: scale(1.04); }
+
+    /* Placeholder */
+    .ac-placeholder {
+      width: 100%; height: 100%; min-height: 170px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .6rem; padding: 1.2rem;
+      text-align: center;
+      border-left: 2px dashed var(--border);
+      transition: border-color .2s, color .2s;
+      color: var(--ink-4);
+    }
+    .ac-card:hover .ac-placeholder {
+      border-color: var(--sec-color, var(--copper));
+      color: var(--sec-color, var(--copper));
+    }
+    .ac-placeholder svg { width: 26px; opacity: .35; margin-bottom: .2rem; }
+    .ac-placeholder-label {
+      font-family: var(--font-mono); font-size: .62rem;
+      letter-spacing: .07em; line-height: 1.5;
+    }
+    /* Légende sous la photo */
+    .ac-photo-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(28,26,22,.55);
+      backdrop-filter: blur(4px);
+      padding: .4rem .7rem;
+      font-family: var(--font-mono); font-size: .6rem;
+      color: rgba(255,255,255,.85); letter-spacing: .08em;
+      text-align: center;
+    }
+
+    /* ══════════════════════════════
+       COMPOSANTES ESSENTIELLES
+       ══════════════════════════════ */
+    .ce-block { margin-top: .5rem; }
+    .ce-label {
+      font-family: var(--font-mono); font-size: .62rem;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--ink-4); margin-bottom: .7rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .ce-label::before { content: ''; display: block; width: 12px; height: 1px; background: var(--ink-4); }
+    .ce-list { display: flex; flex-direction: column; gap: .5rem; }
+    .ce-item {
+      background: var(--bg-2);
+      border-left: 3px solid var(--sec-color, var(--copper));
+      border-radius: 0 var(--r) var(--r) 0;
+      padding: .7rem 1rem;
+      font-size: .83rem; color: var(--ink-2); line-height: 1.65;
+    }
+
+    /* Séparateur niveaux */
+    .niveau-sep { border: none; border-top: 1px dashed var(--border); margin: 2.5rem 0; }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+       ══════════════════════════════ */
+    @media (max-width: 700px) {
+      .ac-card { grid-template-columns: 1fr; }
+      .ac-body { border-right: none; border-bottom: 1px solid var(--border); }
+      .ac-photo { min-height: 200px; }
+      .ac-placeholder { min-height: 200px; border-left: none; border-top: 2px dashed var(--border); }
+      .se-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR FIXE -->
+  <nav class="comp-sidenav" aria-label="Navigation compétences">
+    <a href="#savoir-etre" id="link-se">
+      <span class="csnav-dot" style="color:#b5652a;"></span>
+      <span class="csnav-label">💬 Savoir-être</span>
+    </a>
+    <a href="#concevoir" id="link-concevoir">
+      <span class="csnav-dot" style="color:#c0392b;"></span>
+      <span class="csnav-label">🔧 Concevoir</span>
+    </a>
+    <a href="#verifier" id="link-verifier">
+      <span class="csnav-dot" style="color:#e67e22;"></span>
+      <span class="csnav-label">✅ Vérifier</span>
+    </a>
+  </nav>
+
+  <nav class="navbar">
+    <div class="nav-logo">GEII · Portfolio</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Présentation</a></li>
+      <li><a href="interets.html">Centres d'intérêts</a></li>
+      <li><a href="competences.html" class="active">Compétences</a></li>
+      <li><a href="projets.html">Projets</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Ouvrir le menu">&#9776;</button>
+  </nav>
+
+  <main>
+    <div class="page-header anim-1">
+      <p class="page-eyebrow">Compétences BUT GEII</p>
+      <h1 class="page-title">Savoir-être &amp; <em>Savoir-faire</em></h1>
+    </div>
+
+    <div class="comp-sections">
+
+
+      <!-- ╔══════════════════════════════╗
+           ║        SAVOIR-ÊTRE           ║
+           ╚══════════════════════════════╝ -->
+      <section class="comp-section" id="savoir-etre" style="--sec-color:#b5652a;">
+
+        <div class="cs-header">
+          <div class="cs-icon-wrap">💬</div>
+          <div>
+            <div class="cs-title"><em>Savoir-être</em></div>
+            <div class="cs-subtitle">Compétences humaines &amp; transversales</div>
+          </div>
+        </div>
+
+        <div class="se-grid">
+
+          <div class="se-card">
+            <div class="se-icon">🏉</div>
+            <div>
+              <div class="se-name">Travail d'équipe</div>
+              <p class="se-desc">Pratiquant le rugby depuis l'âge de 10 ans jusqu'au niveau national, j'ai développé une culture du collectif profonde. Mon expérience de <strong>capitaine</strong> m'a appris à fédérer des profils différents autour d'un objectif commun et à décider sous pression.</p>
+              <div class="se-origin"></div>
+            </div>
+          </div>
+
+          <div class="se-card">
+            <div class="se-icon">🎸</div>
+            <div>
+              <div class="se-name">Passion &amp; Persévérance</div>
+              <p class="se-desc">Pratiquer la guitare pendant <strong>13 ans</strong> et explorer continuellement l'électronique audio illustre ma capacité à m'engager sur le long terme. La progression constante et la recherche de la maîtrise sont des attitudes que j'applique à mes apprentissages techniques.</p>
+              <div class="se-origin"></div>
+            </div>
+          </div>
+
+          <div class="se-card">
+            <div class="se-icon">🎯</div>
+            <div>
+              <div class="se-name">Rigueur &amp; Prise de décision</div>
+              <p class="se-desc">Gérer une équipe en situation de match à enjeux m'a habitué à prendre des décisions rapides et à en assumer les conséquences. Cette rigueur se retrouve dans ma façon d'aborder les diagnostics électroniques et l'analyse des systèmes.</p>
+              <div class="se-origin"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- ╔══════════════════════════════╗
+           ║         CONCEVOIR            ║
+           ╚══════════════════════════════╝ -->
+      <section class="comp-section" id="concevoir" style="--sec-color:#c0392b;">
+
+        <div class="cs-header">
+          <div class="cs-icon-wrap">🔧</div>
+          <div>
+            <div class="cs-title"><em>Concevoir</em></div>
+            <div class="cs-subtitle">Savoir-faire technique · 1ère année BUT GEII</div>
+          </div>
+        </div>
+
+        <div class="year-badge">1ère année — en cours d'acquisition</div>
+
+        <!-- ── Niveau 1 ── -->
+        <div class="niveau-header" style="--sec-color:#c0392b;">
+          <span class="niveau-badge">Niveau 1</span>
+          <span class="niveau-title">Réaliser un prototype pour des solutions techniques matériel et/ou logiciel</span>
+        </div>
+
+        <div class="ac-list">
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num">Concevoir · N1 · 01</div>
+              <div class="ac-title">Produire une analyse fonctionnelle d'un système simple</div>
+              <div class="ac-desc">Décomposer un système en fonctions principales et de service, identifier les flux d'énergie et d'information. Traduire un besoin en exigences techniques mesurables à partir d'un cahier des charges fonctionnel.</div>
+            </div>
+            <div class="ac-photo">
+              <!--
+                ► Pour ajouter votre photo :
+                  Remplacez le bloc <div class="ac-placeholder"> par :
+                  <img src="photothermo.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Légende de la photo</div>
+              -->
+              <img src="photodiag.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Synoptique d'un diagramme fonctionnelle sur la partie émetteur du projet "Kart à Hélice"</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Schéma fonctionnel<br>ou diagramme SYSML</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num">Concevoir · N1 · 02</div>
+              <div class="ac-title">Réaliser un prototype pour des solutions techniques matériel et/ou logiciel</div>
+              <div class="ac-desc">Concevoir et assembler un prototype fonctionnel à partir d'un schéma ou d'un cahier des charges, en intégrant composants matériels et logiciels. Valider le comportement du prototype face aux exigences initiales.</div>
+            </div>
+            <div class="ac-photo">
+              <img src="photothermo.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Prototrype de la carte électronique "'thermomètre de bain"</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Photo du<br>prototype réalisé</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num">Concevoir · N1 · 03</div>
+              <div class="ac-title">Rédiger un dossier de fabrication à partir d'un dossier de conception</div>
+              <div class="ac-desc">Produire les documents techniques nécessaires à la fabrication : nomenclature, plans, gamme opératoire. Traduire les intentions de conception en instructions exploitables par un tiers.</div>
+            </div>
+            <div class="ac-photo">
+              <img src="photoddf.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Schéma électrique complet du projet "Kart à Hélice"</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Extrait du<br>dossier de fabrication</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="niveau-sep">
+
+        <!-- ── Niveau 2 ── -->
+        <div class="niveau-header" style="--sec-color:#c0392b;">
+          <span class="niveau-badge">Niveau 2</span>
+          <span class="niveau-title">Proposer et dérisquer des solutions techniques liées à l'analyse fonctionnelle</span>
+        </div>
+
+        <div class="ac-list">
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num">Concevoir · N2 · 01</div>
+              <div class="ac-title">Proposer des solutions techniques liées à l'analyse fonctionnelle</div>
+              <div class="ac-desc">Rechercher et comparer des solutions répondant aux exigences fonctionnelles, en tenant compte des contraintes techniques, économiques et environnementales. Argumenter le choix retenu.</div>
+            </div>
+            <div class="ac-photo">
+               <img src="tabcomp.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Tableau comparatif de 2 régulateurs linéaires</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Tableau comparatif<br>de solutions</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num">Concevoir · N2 · 02</div>
+              <div class="ac-title">Dérisquer les solutions techniques retenues</div>
+              <div class="ac-desc">Identifier et évaluer les risques associés aux solutions choisies, proposer des mesures préventives ou correctives pour garantir la fiabilité et la robustesse du système.</div>
+            </div>
+            <div class="ac-photo">
+               <img src="derisquage.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Anticipation d'un pique de courant de démarage sur le projet "Kart à Hélice</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Analyse de risques<br>ou AMDEC</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num">Concevoir · N2 · 03</div>
+              <div class="ac-title">Contribuer à la rédaction d'un cahier des charges</div>
+              <div class="ac-desc">Participer à la formalisation des exigences fonctionnelles et techniques d'un projet, en interaction avec le client ou les parties prenantes pour traduire le besoin en spécifications mesurables.</div>
+            </div>
+            <div class="ac-photo">
+               <img src="cdc.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Extrait du CDC du projet "Kart à Hélice"</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Extrait du cahier<br>des charges rédigé</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num">Concevoir · N2 · 04</div>
+              <div class="ac-title">Prouver la pertinence de ses choix technologiques</div>
+              <div class="ac-desc">Justifier et argumenter les solutions retenues à l'aide de calculs, simulations (ISIS, MATLAB…) ou mesures expérimentales pour démontrer leur adéquation aux besoins définis.</div>
+            </div>
+            <div class="ac-photo">
+              <img src="simuisis.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Simulation d'une tension voulue aux bornes d'une DEL</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Simulation ISIS<br>ou résultats de calculs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num">Concevoir · N2 · 05</div>
+              <div class="ac-title">Rédiger un dossier de conception</div>
+              <div class="ac-desc">Produire un document structuré regroupant l'ensemble des choix de conception, les schémas, les calculs de dimensionnement et les justifications associées sous une forme communicable.</div>
+            </div>
+            <div class="ac-photo">
+              <img src="ddc.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Extrait d'une page de DDC du projet "Kart à Hélice"</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Page du dossier<br>de conception</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Composantes essentielles -->
+        <div class="ce-block">
+          <div class="ce-label">Composantes essentielles</div>
+          <div class="ce-list">
+            <div class="ce-item">En adoptant une approche holistique intégrant les innovations technologiques en lien avec la stratégie de l'entreprise pour répondre à un besoin client</div>
+            <div class="ce-item">En produisant l'ensemble des documents nécessaires pour le client et les différents prestataires</div>
+            <div class="ce-item">En communiquant de façon adaptée avec les différents acteurs avant et pendant la phase de conception</div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ╔══════════════════════════════╗
+           ║          VÉRIFIER            ║
+           ╚══════════════════════════════╝ -->
+      <section class="comp-section" id="verifier" style="--sec-color:#e67e22;">
+
+        <div class="cs-header">
+          <div class="cs-icon-wrap">✅</div>
+          <div>
+            <div class="cs-title"><em>Vérifier</em></div>
+            <div class="cs-subtitle">Savoir-faire technique · 1ère année BUT GEII</div>
+          </div>
+        </div>
+
+        <div class="year-badge">1ère année — en cours d'acquisition</div>
+
+        <!-- ── Niveau 1 ── -->
+        <div class="niveau-header" style="--sec-color:#e67e22;">
+          <span class="niveau-badge" style="background:#e67e22;">Niveau 1</span>
+          <span class="niveau-title">Appliquer une procédure d'essais et identifier un dysfonctionnement</span>
+        </div>
+
+        <div class="ac-list">
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num" style="color:#e67e22;">Vérifier · N1 · 01</div>
+              <div class="ac-title">Appliquer une procédure d'essais</div>
+              <div class="ac-desc">Suivre méthodiquement un protocole de test défini, utiliser les instruments de mesure adaptés (oscilloscope, multimètre, GBF) et relever les résultats de manière structurée pour évaluer le comportement du système.</div>
+            </div>
+            <div class="ac-photo">
+              <img src="essai.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Procédure de vérification de fréquence de clignotement</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Photo en TP :<br>oscilloscope, mesures</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num" style="color:#e67e22;">Vérifier · N1 · 02</div>
+              <div class="ac-title">Identifier un dysfonctionnement</div>
+              <div class="ac-desc">Analyser les résultats de mesures pour détecter un comportement anormal du système, localiser la zone de défaut et caractériser la nature du problème rencontré.</div>
+            </div>
+            <div class="ac-photo">
+              <img src="signalbruit.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">TP Energie : signal bruité d'un courant lors de l'étude d'un pont redresseur double alternance</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Relevé de mesures<br>ou courbe anormale</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num" style="color:#e67e22;">Vérifier · N1 · 03</div>
+              <div class="ac-title">Décrire un dysfonctionnement</div>
+              <div class="ac-desc">Formaliser par écrit les symptômes observés, les conditions d'apparition et les impacts sur le système, en vue d'une communication technique claire avec l'équipe ou le client.</div>
+            </div>
+            <div class="ac-photo">
+               <img src="disfonc.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Exigence lumineuse sur une DEL du projet "Kart à Hélice non-comforme</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Compte-rendu<br>ou rapport de TP</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="niveau-sep">
+
+        <!-- ── Niveau 2 ── -->
+        <div class="niveau-header" style="--sec-color:#e67e22;">
+          <span class="niveau-badge" style="background:#e67e22;">Niveau 2</span>
+          <span class="niveau-title">Certifier le fonctionnement d'un nouvel équipement industriel</span>
+        </div>
+
+        <div class="ac-list">
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num" style="color:#e67e22;">Vérifier · N2 · 01</div>
+              <div class="ac-title">Identifier les tests et mesures à mettre en place pour valider un système</div>
+              <div class="ac-desc">Définir un plan de validation à partir des spécifications techniques : choisir les grandeurs à mesurer, les seuils d'acceptation et les instruments appropriés pour chaque essai.</div>
+            </div>
+            <div class="ac-photo">
+              <img src="procedure.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Extrait d'une procédure d'essai appliquée à l'émetteur du projet Kart à Hélice</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Plan de tests<br>ou tableau de validation</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num" style="color:#e67e22;">Vérifier · N2 · 02</div>
+              <div class="ac-title">Certifier le fonctionnement d'un nouvel équipement industriel</div>
+              <div class="ac-desc">Conduire l'ensemble des essais de mise en service, valider la conformité aux exigences du cahier des charges et produire le procès-verbal de réception attestant la mise en service.</div>
+            </div>
+            <div class="ac-photo">
+              <div class="ac-placeholder" style="--sec-color:#e67e22;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Photo de la<br>mise en service</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num" style="color:#e67e22;">Vérifier · N2 · 03</div>
+              <div class="ac-title">Évaluer la cause racine d'un dysfonctionnement</div>
+              <div class="ac-desc">Utiliser des méthodes d'analyse (5 pourquoi, diagramme d'Ishikawa) pour remonter à l'origine profonde d'un défaut et mettre en place des actions évitant sa réapparition.</div>
+            </div>
+            <div class="ac-photo">
+              <div class="ac-placeholder" style="--sec-color:#e67e22;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Diagramme d'analyse<br>ou arbre des causes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num" style="color:#e67e22;">Vérifier · N2 · 04</div>
+              <div class="ac-title">Proposer une solution corrective à un dysfonctionnement</div>
+              <div class="ac-desc">Concevoir et argumenter une action corrective ciblée, évaluer sa faisabilité technique et son impact sur le reste du système avant toute implémentation.</div>
+            </div>
+            <div class="ac-photo">
+              <div class="ac-placeholder" style="--sec-color:#e67e22;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Composant remplacé<br>ou correction appliquée</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ac-card">
+            <div class="ac-body">
+              <div class="ac-num" style="color:#e67e22;">Vérifier · N2 · 05</div>
+              <div class="ac-title">Produire une procédure d'essais pour valider la conformité d'un système</div>
+              <div class="ac-desc">Rédiger un document de procédure complet et reproductible : séquence d'opérations, critères d'acceptation, matériel requis et consignes de sécurité associées.</div>
+            </div>
+            <div class="ac-photo">
+             <img src="ddv.jpg" alt="Analyse fonctionnelle">
+                  <div class="ac-photo-caption">Extrait d'une page de DDV sur le projet "Kart à Hélice"</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <span class="ac-placeholder-label">Procédure rédigée<br>ou fiche de test</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Composantes essentielles -->
+        <div class="ce-block">
+          <div class="ce-label">Composantes essentielles</div>
+          <div class="ce-list">
+            <div class="ce-item" style="border-color:#e67e22;">En tenant compte des spécificités matérielles, réglementaires et contextuelles</div>
+            <div class="ce-item" style="border-color:#e67e22;">En mettant en œuvre un plan d'essais et d'évaluations, dans une visée d'analyse qualitative et corrective</div>
+            <div class="ce-item" style="border-color:#e67e22;">En tenant compte des enjeux économiques, environnementaux et réglementaires de la société</div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>BUT GEII · IUT de Bordeaux</span>
+    <span>2025 – 2028</span>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    const sections = ['savoir-etre', 'concevoir', 'verifier'];
+    const links = {
+      'savoir-etre': document.getElementById('link-se'),
+      'concevoir':   document.getElementById('link-concevoir'),
+      'verifier':    document.getElementById('link-verifier'),
+    };
+    function updateActive() {
+      const y = window.scrollY + window.innerHeight / 3;
+      let current = sections[0];
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= y) current = id;
+      });
+      Object.keys(links).forEach(id => {
+        if (links[id]) links[id].classList.toggle('active-section', id === current);
+      });
+    }
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  </script>
+</body>
+</html>

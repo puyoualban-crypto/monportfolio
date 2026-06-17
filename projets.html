@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projets – Portfolio BUT GEII</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+
+    /* ══════════════════════════════
+       SIDEBAR FIXE DROITE
+       ══════════════════════════════ */
+    .proj-sidenav {
+      position: fixed; right: 2rem; top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: .6rem;
+      z-index: 150;
+    }
+    .proj-sidenav a {
+      display: flex; align-items: center; gap: .7rem;
+      padding: .5rem 1rem .5rem .8rem;
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 30px; font-family: var(--font-mono);
+      font-size: .67rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--ink-3); box-shadow: var(--shadow); white-space: nowrap;
+      max-width: 2.4rem; overflow: hidden;
+      transition: max-width .35s ease, border-color .2s, color .2s, background .2s, box-shadow .2s;
+    }
+    .proj-sidenav a:hover {
+      max-width: 220px; border-color: var(--copper);
+      color: var(--copper); box-shadow: 0 4px 16px rgba(181,101,42,.16);
+    }
+    .proj-sidenav a.active-section {
+      max-width: 220px; background: var(--copper);
+      border-color: var(--copper); color: #fff;
+      box-shadow: 0 4px 16px rgba(181,101,42,.28);
+    }
+    .psnav-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; opacity: .85; }
+    .psnav-label { flex-shrink: 0; }
+    @media (max-width: 960px) { .proj-sidenav { display: none; } }
+
+    /* ══════════════════════════════
+       STRUCTURE GLOBALE
+       ══════════════════════════════ */
+    .proj-sections { display: flex; flex-direction: column; }
+
+    .proj-section {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+    }
+    .proj-section:last-child { border-bottom: none; }
+    .proj-section::before {
+      content: ''; display: block;
+      width: 40px; height: 3px; border-radius: 2px;
+      background: var(--sec-color, var(--copper)); margin-bottom: 2rem;
+    }
+
+    /* En-tête de projet */
+    .ps-header {
+      display: flex; align-items: flex-start; gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .ps-icon-wrap {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem; flex-shrink: 0;
+      border: 1.5px solid var(--border); background: #fff; box-shadow: var(--shadow);
+    }
+    .ps-meta-top {
+      font-family: var(--font-mono); font-size: .67rem;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--sec-color, var(--copper)); margin-bottom: .35rem;
+    }
+    .ps-title {
+      font-family: var(--font-display); font-size: 1.9rem; font-weight: 900;
+      color: var(--ink); line-height: 1.08;
+    }
+    .ps-title em { font-style: italic; color: var(--sec-color, var(--copper)); }
+    .ps-subtitle {
+      font-family: var(--font-mono); font-size: .72rem;
+      color: var(--ink-3); margin-top: .35rem;
+    }
+
+    /* Corps de texte */
+    .ps-body {
+      font-size: .92rem; color: var(--ink-2); line-height: 1.9;
+      max-width: 800px; margin-bottom: 1rem;
+    }
+    .ps-body strong { color: var(--sec-color, var(--copper)); }
+
+    /* Bloc fonctionnement (encart) */
+    .ps-callout {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--sec-color, var(--copper));
+      border-radius: 0 var(--r) var(--r) 0;
+      padding: 1.2rem 1.5rem;
+      margin: 1.5rem 0 2rem;
+      box-shadow: var(--shadow);
+    }
+    .ps-callout-label {
+      font-family: var(--font-mono); font-size: .62rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--sec-color, var(--copper)); margin-bottom: .6rem;
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .ps-callout ul {
+      list-style: none; display: flex; flex-direction: column; gap: .5rem;
+    }
+    .ps-callout li {
+      font-size: .85rem; color: var(--ink-2); line-height: 1.6;
+      padding-left: 1.1rem; position: relative;
+    }
+    .ps-callout li::before {
+      content: '';
+      position: absolute; left: 0; top: .55rem;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--sec-color, var(--copper));
+    }
+    .ps-callout li strong { color: var(--ink); }
+
+    /* Dossiers techniques (badges en ligne) */
+    .ps-docs {
+      display: flex; flex-wrap: wrap; gap: .5rem;
+      margin-bottom: 2rem;
+    }
+    .ps-doc-chip {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: .35rem .9rem;
+      font-family: var(--font-mono); font-size: .68rem;
+      color: var(--ink-2);
+    }
+    .ps-doc-chip svg { width: 13px; height: 13px; opacity: .6; }
+
+    /* ══════════════════════════════
+       PHOTOS — 3 emplacements
+       ══════════════════════════════ */
+    .ps-photo-label {
+      font-family: var(--font-mono); font-size: .62rem;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--ink-4); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .ps-photo-label::before { content: ''; display: block; width: 12px; height: 1px; background: var(--ink-4); }
+
+    .ps-photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .9rem;
+      margin-bottom: 2.2rem;
+    }
+    .ps-photo-slot {
+      aspect-ratio: 4/3;
+      border-radius: var(--r);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-2);
+      box-shadow: var(--shadow);
+      position: relative;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .ps-photo-slot:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .ps-photo-slot img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .4s ease;
+    }
+    .ps-photo-slot:hover img { transform: scale(1.04); }
+
+    .ps-photo-empty {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .5rem; padding: 1rem; text-align: center;
+      color: var(--ink-4);
+      border: 2px dashed var(--border);
+      border-radius: var(--r);
+      font-family: var(--font-mono); font-size: .63rem; letter-spacing: .06em;
+      transition: border-color .2s, color .2s;
+    }
+    .ps-photo-empty:hover {
+      border-color: var(--sec-color, var(--copper));
+      color: var(--sec-color, var(--copper));
+    }
+    .ps-photo-empty svg { width: 24px; opacity: .4; }
+
+    .ps-photo-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(28,26,22,.55);
+      backdrop-filter: blur(4px);
+      padding: .35rem .6rem;
+      font-family: var(--font-mono); font-size: .58rem;
+      color: rgba(255,255,255,.85); letter-spacing: .06em;
+      text-align: center;
+    }
+
+    /* ══════════════════════════════
+       COMPÉTENCES ASSOCIÉES
+       ══════════════════════════════ */
+    .ps-skills-label {
+      font-family: var(--font-mono); font-size: .62rem;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--ink-4); margin-bottom: .8rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .ps-skills-label::before { content: ''; display: block; width: 12px; height: 1px; background: var(--ink-4); }
+
+    .ps-skills-grid {
+      display: flex; flex-wrap: wrap; gap: .5rem;
+    }
+    .ps-skill-pill {
+      display: inline-flex; align-items: center; gap: .55rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: .4rem .85rem;
+      font-family: var(--font-mono); font-size: .72rem;
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      transition: border-color .2s, transform .2s;
+    }
+    .ps-skill-pill:hover {
+      border-color: var(--sec-color, var(--copper));
+      transform: translateY(-2px);
+    }
+    .ps-skill-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--sec-color, var(--copper)); flex-shrink: 0;
+    }
+
+    /* Stat de groupe (binôme / groupe) */
+    .ps-team-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: .35rem 1rem;
+      font-family: var(--font-mono); font-size: .68rem;
+      color: var(--ink-2);
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 700px) {
+      .ps-photo-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .ps-photo-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR FIXE -->
+  <nav class="proj-sidenav" aria-label="Navigation projets">
+    <a href="#rafale" id="link-rafale">
+      <span class="psnav-dot" style="color:#c0392b;"></span>
+      <span class="psnav-label">✈️ Maquette Rafale</span>
+    </a>
+    <a href="#thermometre" id="link-thermometre">
+      <span class="psnav-dot" style="color:#2980b9;"></span>
+      <span class="psnav-label">🌡️ Thermomètre bébé</span>
+    </a>
+    <a href="#kah" id="link-kah">
+      <span class="psnav-dot" style="color:#27ae60;"></span>
+      <span class="psnav-label">🏎️ Kart à hélice</span>
+    </a>
+  </nav>
+
+  <nav class="navbar">
+    <div class="nav-logo">GEII · Portfolio</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Présentation</a></li>
+      <li><a href="interets.html">Centres d'intérêts</a></li>
+      <li><a href="competences.html">Compétences</a></li>
+      <li><a href="projets.html" class="active">Projets</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Ouvrir le menu">&#9776;</button>
+  </nav>
+
+  <main>
+    <div class="page-header anim-1">
+      <p class="page-eyebrow">Projets réalisés</p>
+      <h1 class="page-title">Mes <em>réalisations</em></h1>
+    </div>
+
+    <div class="proj-sections">
+
+
+      <!-- ╔══════════════════════════════╗
+           ║   PROJET 1 — MAQUETTE RAFALE ║
+           ╚══════════════════════════════╝ -->
+      <section class="proj-section" id="rafale" style="--sec-color:#c0392b;">
+
+        <div class="ps-header">
+          <div class="ps-icon-wrap">✈️</div>
+          <div>
+            <div class="ps-meta-top">Projet 1 · Semestre 1</div>
+            <div class="ps-title">Carte électronique embarquée — <em>Maquette de Rafale</em> - Projet SLR</div>
+          </div>
+        </div>
+
+        <div class="ps-team-badge">👥 Travail en binôme</div>
+
+        <p class="ps-body">
+          Ce premier projet de S1 portait sur la <strong>conception, la fabrication et la
+          vérification</strong> du bon fonctionnement d'une carte électronique embarquée sur
+          une maquette de Rafale. L'objectif était de concevoir un système complet intégrant
+          deux fonctions distinctes, de la spécification jusqu'à la réalisation physique
+          de la carte.
+        </p>
+
+        <div class="ps-callout">
+          <div class="ps-callout-label">⚙ Fonctionnement de la carte</div>
+          <ul>
+            <li><strong>Partie Son</strong> — émission d'un son de turboréacteur, restituant l'ambiance sonore caractéristique de l'appareil</li>
+            <li><strong>Partie Lumière</strong> — clignotement de LEDs à fréquence fixe, simulant les feux de signalisation de l'avion</li>
+          </ul>
+        </div>
+
+        <p class="ps-body">
+          Chaque étape de ce projet a été accompagnée de la rédaction de dossiers techniques
+          associés, retraçant l'intégralité de la démarche d'ingénierie suivie.
+        </p>
+
+        <div class="ps-docs">
+          <span class="ps-doc-chip">📄 Dossier de Conception préliminaire</span>
+          <span class="ps-doc-chip">📄 Dossier de Conception détaillé</span>
+          <span class="ps-doc-chip">📄 Dossier de Fabrication</span>
+          <span class="ps-doc-chip">📄 Dossier de Vérification</span>
+        </div>
+
+        <!-- PHOTOS -->
+        <div class="ps-photo-label">Photos du projet</div>
+        <div class="ps-photo-grid">
+
+          <div class="ps-photo-slot">
+            <!--
+              ► Pour ajouter une photo :
+                Remplacez le bloc ps-photo-empty par :
+                <img src="votre-photo.jpg" alt="Description">
+                <div class="ps-photo-caption">Légende</div>
+            -->
+            <img src="slrschema.jpg" alt="Description">
+                <div class="ps-photo-caption">Schéma électrique complet</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Maquette du<br>Rafale assemblée</span>
+            </div>
+          </div>
+
+          <div class="ps-photo-slot">
+            <img src="slrcarte.jpg" alt="Description">
+                <div class="ps-photo-caption">PCB soudé</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Carte électronique<br>soudée</span>
+            </div>
+          </div>
+
+          <div class="ps-photo-slot">
+ <img src="slrverif.jpg" alt="Description">
+                <div class="ps-photo-caption">Vérification des fréquences de clignotement</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Schéma ARES /<br>routage PCB</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COMPÉTENCES -->
+        <div class="ps-skills-label">Compétences associées</div>
+        <div class="ps-skills-grid">
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>ARES</span>
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>ISIS Dessiner</span>
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>Conception de circuits électroniques</span>
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>Systèmes embarqués</span>
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>Soudage</span>
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>Analyse des exigences</span>
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>Documents Techniques</span>
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>Microsoft Excel</span>
+          <span class="ps-skill-pill" style="--sec-color:#c0392b;"><span class="ps-skill-dot"></span>Travail d'équipe</span>
+        </div>
+
+      </section>
+
+
+      <!-- ╔══════════════════════════════════╗
+           ║  PROJET 2 — THERMOMÈTRE DE BAIN   ║
+           ╚══════════════════════════════════╝ -->
+      <section class="proj-section" id="thermometre" style="--sec-color:#2980b9;">
+
+        <div class="ps-header">
+          <div class="ps-icon-wrap">🌡️</div>
+          <div>
+            <div class="ps-meta-top">Projet 2 · Semestre 1</div>
+            <div class="ps-title">Prototype de <em>thermomètre de bain</em> pour bébé - Projet TDB</div>
+          </div>
+        </div>
+
+        <div class="ps-team-badge">👥 Travail en groupe de 4</div>
+
+        <p class="ps-body">
+          Le second projet de S1 consistait en la <strong>conception, la fabrication et la
+          vérification</strong> du fonctionnement normal d'un prototype de thermomètre de bain
+          destiné à sécuriser le bain d'un bébé. Le système devait traduire une mesure de
+          température en une indication visuelle simple et immédiatement compréhensible.
+        </p>
+
+        <div class="ps-callout">
+          <div class="ps-callout-label">⚙ Fonctionnement du prototype</div>
+          <ul>
+            <li><strong>LED bleue</strong> — s'allume lorsque la température est inférieure à 36 °C (eau trop froide)</li>
+            <li><strong>LED verte</strong> — s'allume lorsque le capteur détecte une valeur comprise entre 36 °C et 39 °C (température idéale)</li>
+            <li><strong>LED rouge</strong> — s'allume lorsque la température dépasse 39 °C (eau trop chaude)</li>
+          </ul>
+        </div>
+
+        <p class="ps-body">
+          Comme pour le premier projet, chaque étape a été accompagnée de la rédaction de
+          dossiers techniques formalisant la démarche de conception jusqu'à la validation finale.
+        </p>
+
+        <div class="ps-docs">
+          <span class="ps-doc-chip">📄 Dossier de Conception préliminaire</span>
+          <span class="ps-doc-chip">📄 Dossier de Conception détaillé</span>
+          <span class="ps-doc-chip">📄 Dossier de Fabrication</span>
+          <span class="ps-doc-chip">📄 Dossier de Vérification</span>
+        </div>
+
+        <!-- PHOTOS -->
+        <div class="ps-photo-label">Photos du projet</div>
+        <div class="ps-photo-grid">
+
+          <div class="ps-photo-slot">
+             <img src="photothermo.jpg" alt="Description">
+                <div class="ps-photo-caption">Carte électronique complète</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Prototype<br>final assemblé</span>
+            </div>
+          </div>
+
+          <div class="ps-photo-slot">
+            <img src="tdbschema.jpg" alt="Description">
+                <div class="ps-photo-caption">Schéma électrique complet du thermomètre</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Test des 3 seuils<br>de température</span>
+            </div>
+          </div>
+
+          <div class="ps-photo-slot">
+            <img src="tdbsoudure.jpg" alt="Description">
+                <div class="ps-photo-caption">Carte électronique en cours de soudure</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Carte électronique<br>en cours de soudage</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COMPÉTENCES -->
+        <div class="ps-skills-label">Compétences associées</div>
+        <div class="ps-skills-grid">
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>Travail d'équipe</span>
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>Systèmes embarqués</span>
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>ARES</span>
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>ISIS Dessiner</span>
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>Conception de circuits électroniques</span>
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>Soudage</span>
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>Analyse des exigences</span>
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>Documents Techniques</span>
+          <span class="ps-skill-pill" style="--sec-color:#2980b9;"><span class="ps-skill-dot"></span>Microsoft Excel</span>
+        </div>
+
+      </section>
+
+
+      <!-- ╔══════════════════════════════════╗
+           ║   PROJET 3 — KART À HÉLICE (SAE)  ║
+           ╚══════════════════════════════════╝ -->
+      <section class="proj-section" id="kah" style="--sec-color:#27ae60;">
+
+        <div class="ps-header">
+          <div class="ps-icon-wrap">🏎️</div>
+          <div>
+            <div class="ps-meta-top">Projet 3 · SAE — Semestre 2</div>
+            <div class="ps-title"><em>Kart à hélice</em> télécommandé — Projet KAH</div>
+          </div>
+        </div>
+
+        <div class="ps-team-badge">👥 Travail en groupe de 8</div>
+
+        <p class="ps-body">
+          Unique projet de Situation d'Apprentissage et d'évaluation 5  (SAE)  du S2, ce projet consiste en la <strong>conception, la
+          fabrication et la vérification</strong> du fonctionnement d'un kart à hélice
+          télécommandé. Le système repose sur deux cartes électroniques distinctes
+          communiquant entre elles à distance pour piloter l'ensemble des actionneurs du kart.
+        </p>
+
+        <div class="ps-callout">
+          <div class="ps-callout-label">⚙ Architecture du système</div>
+          <ul>
+            <li><strong>Carte émettrice</strong> — intégrée à la télécommande, contrôlée manuellement par l'utilisateur</li>
+            <li><strong>Carte réceptrice</strong> — située sur le châssis du kart, connectée à l'ensemble de ses périphériques</li>
+            <li><strong>Communication</strong> — l'émetteur envoie des trames <strong>NEC</strong> par ondes infrarouges vers le récepteur, qui convertit ces informations et les transmet au moteur, aux LEDs, au servomoteur ou encore au Buzzer pour piloter le kart à distance</li>
+          </ul>
+        </div>
+
+        <p class="ps-body">
+          Comme pour les projets précédents, chaque étape est accompagnée de la rédaction
+          des dossiers techniques retraçant la démarche de conception, de fabrication et
+          de vérification du système complet.
+        </p>
+
+        <div class="ps-docs">
+          <span class="ps-doc-chip">📄 Dossier de Conception préliminaire</span>
+          <span class="ps-doc-chip">📄 Dossier de Conception détaillé</span>
+          <span class="ps-doc-chip">📄 Dossier de Fabrication</span>
+          <span class="ps-doc-chip">📄 Dossier de Vérification</span>
+        </div>
+
+        <!-- PHOTOS -->
+        <div class="ps-photo-label">Photos du projet</div>
+        <div class="ps-photo-grid">
+
+          <div class="ps-photo-slot">
+             <img src="kahschema.jpg" alt="Description">
+                <div class="ps-photo-caption">Schéma électrique complet de la partie émetteur</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Kart à hélice<br>assemblé</span>
+            </div>
+          </div>
+
+          <div class="ps-photo-slot">
+            <img src="kah.jpg" alt="Description">
+                <div class="ps-photo-caption">Kart complet avec récepteur et émetteur</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Carte émettrice /<br>télécommande</span>
+            </div>
+          </div>
+
+          <div class="ps-photo-slot">
+            <img src="kahsoudure.jpg" alt="Description">
+                <div class="ps-photo-caption">Carte emmetrice en cours de soudure</div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span>Carte réceptrice<br>sur le châssis</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COMPÉTENCES -->
+        <div class="ps-skills-label">Compétences associées</div>
+        <div class="ps-skills-grid">
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>Travail d'équipe</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>Systèmes embarqués</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>C (langage de programmation)</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>ARES</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>ISIS Dessiner</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>Conception de circuits électroniques</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>Soudage</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>Analyse des exigences</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>Documents Techniques</span>
+          <span class="ps-skill-pill" style="--sec-color:#27ae60;"><span class="ps-skill-dot"></span>Microsoft Excel</span>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>BUT GEII · IUT de Bordeaux</span>
+    <span>2025 – 2028</span>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    const sections = ['rafale', 'thermometre', 'kah'];
+    const links = {
+      'rafale':      document.getElementById('link-rafale'),
+      'thermometre': document.getElementById('link-thermometre'),
+      'kah':         document.getElementById('link-kah'),
+    };
+    function updateActive() {
+      const y = window.scrollY + window.innerHeight / 3;
+      let current = sections[0];
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= y) current = id;
+      });
+      Object.keys(links).forEach(id => {
+        if (links[id]) links[id].classList.toggle('active-section', id === current);
+      });
+    }
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  </script>
+</body>
+</html>
